@@ -1,0 +1,10 @@
+Variables:
+camelCase
+
+Enums:
+ALLCAPS
+
+Functions:
+void ExampleFunction(int _exampleParam)
+{
+}
