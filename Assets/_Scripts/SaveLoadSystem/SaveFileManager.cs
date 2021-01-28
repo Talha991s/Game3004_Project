@@ -1,52 +1,61 @@
 /*  Author: Joseph Malibiran
  *  Date Created: January 28, 2021
  *  Last Updated: January 28, 2021
- *  Description:
+ *  Description: Manages and also retains information regarding the loaded save files and all available save files. 
  *  
  */
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.Windows;
 
-public class SaveManager : MonoBehaviour 
-{
-    [SerializeField] private string savefileName = "marco";
+public class SaveFileManager : MonoBehaviour {
+    [SerializeField] private string savefileName = "Hamstronaut"; //This is the name of the save file. An indexing number will be appended to this name. This is different from the save file header seen in-game.
+    [SerializeField] private string savefileHeader = ""; //TODO Remove. This is only used during development to test
+
     [SerializeField] private Vector3 playerLocation = Vector3.zero;
     [SerializeField] private Vector3 playerOrientation = Vector3.zero;
-
     [SerializeField] private int livesAmount = 3;
     [SerializeField] private int ammoAmount = 100;
     [SerializeField] private int seedsCollected = 0;
     [SerializeField] private int aliensKilled = 0;
     [SerializeField] private int currentLevel = 0; //0 means not in a level
     [SerializeField] private int levelsUnlocked = 1;
+    [SerializeField] private int selectedSaveSlot = 1; //TODO Remove. This is only used during development to test
 
     [SerializeField] private bool saveButton = false; //TODO Remove. This is only used during development to test savefile saving.
     [SerializeField] private bool loadButton = false; //TODO Remove. This is only used during development to test savefile loading.
 
+    private string[] availableSaveFiles = new string[8]; //Note: This game will have a maximum 8 save slots hardcoded.
     private SaveData loadedSaveData; //Initial save data being used
 
+    //TODO Remove. This is only used during development to test
     private void Update() 
     {
+        //TODO Remove. This is only used during development to test savefile saving.
         if (saveButton) 
         {
             saveButton = false;
-            SaveGame();
+            SaveGame(selectedSaveSlot);
         }
-
+        //TODO Remove. This is only used during development to test savefile loading.
         if (loadButton) 
         {
             loadButton = false;
-            LoadGame(0); //temp test
+            LoadGame(selectedSaveSlot); 
         }
     }
 
-    public void SaveGame() 
+    //Saves game data at given save slot index
+    public void SaveGame(int saveSlotIndex) 
     {
+        if (saveSlotIndex <= 0 || saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
+            Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
+            return;
+        }
+
         loadedSaveData = new SaveData();
-        loadedSaveData.savefileName = this.savefileName;
+        loadedSaveData.savefileHeader = "Marco    Lives: " + livesAmount + "; Ammo: " + ammoAmount + "; Seeds: " + seedsCollected + "; Levels Unlocked: " + levelsUnlocked;
         loadedSaveData.playerLocationX = this.playerLocation.x;
         loadedSaveData.playerLocationY = this.playerLocation.y;
         loadedSaveData.playerLocationZ = this.playerLocation.z;
@@ -61,31 +70,20 @@ public class SaveManager : MonoBehaviour
         loadedSaveData.currentLevel = this.currentLevel; //0 means not in a level
         loadedSaveData.levelsUnlocked = this.levelsUnlocked;
 
-        SaveFileReadWrite.WriteToSaveFile(Application.persistentDataPath + "/" + savefileName + ".hamsave", loadedSaveData);
+        SaveFileReaderWriter.WriteToSaveFile(Application.persistentDataPath + "/" + savefileName + saveSlotIndex + ".hamsave", loadedSaveData);
     }
 
-    public void LoadGame(string path) 
+    //Loads save file data at given save slot index
+    public void LoadGame(int saveSlotIndex) 
     {
-        loadedSaveData = SaveFileReadWrite.ReadFromSaveFile(path);
+        if (saveSlotIndex <= 0 || saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
+            Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
+            return;
+        }
 
-        this.savefileName = loadedSaveData.savefileName;
-        this.playerLocation = new Vector3(loadedSaveData.playerLocationX, loadedSaveData.playerLocationY, loadedSaveData.playerLocationZ);
-        this.playerOrientation = new Vector3(loadedSaveData.playerOrientationX, loadedSaveData.playerOrientationY, loadedSaveData.playerOrientationZ);
-        this.livesAmount = loadedSaveData.livesAmount;
-        this.ammoAmount = loadedSaveData.ammoAmount;
-        this.seedsCollected = loadedSaveData.seedsCollected;
-        this.aliensKilled = loadedSaveData.aliensKilled;
-        this.currentLevel = loadedSaveData.currentLevel; //0 means not in a level
-        this.levelsUnlocked = loadedSaveData.levelsUnlocked;
-    }
+        loadedSaveData = SaveFileReaderWriter.ReadFromSaveFile(Application.persistentDataPath + "/" + savefileName + saveSlotIndex + ".hamsave"); 
 
-    public void LoadGame(int saveFileIndex) 
-    {
-        //TODO: saveFileIndex currently unused
-
-        loadedSaveData = SaveFileReadWrite.ReadFromSaveFile(Application.persistentDataPath + "/" + savefileName + ".hamsave"); //TODO temp
-
-        this.savefileName = loadedSaveData.savefileName;
+        this.savefileHeader = loadedSaveData.savefileHeader;
         this.playerLocation = new Vector3(loadedSaveData.playerLocationX, loadedSaveData.playerLocationY, loadedSaveData.playerLocationZ);
         this.playerOrientation = new Vector3(loadedSaveData.playerOrientationX, loadedSaveData.playerOrientationY, loadedSaveData.playerOrientationZ);
         this.livesAmount = loadedSaveData.livesAmount;
@@ -96,4 +94,51 @@ public class SaveManager : MonoBehaviour
         this.levelsUnlocked =loadedSaveData.levelsUnlocked;
     }
 
+    //TODO Untested
+    //Returns the loaded SaveData File.
+    public SaveData GetSaveData() 
+    {
+        if (loadedSaveData == null) 
+        {
+            Debug.LogError("[Error] No save data loaded yet; returning SaveData with default properties.");
+            return new SaveData();
+        }
+
+        return loadedSaveData;
+    }
+
+    //TODO Untested
+    //Returns the header of a specified save slot. 
+    //The header contains information about the save file. If the save slot is empty it will return "Empty Save Slot".
+    //Usage: Save Slots should be represented by buttons that the user can click and the button text should be a save slot header to display its information. 
+    //Pressing the button should call SaveFileManager.LoadGame(saveSlotIndex) where each button represents different save slots.
+    public string GetSaveSlotHeader(int saveSlotIndex) 
+    {
+        if (saveSlotIndex <= 0 || saveSlotIndex > 8) 
+        { //This game will have a maximum 8 save slots hardcoded.
+            Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
+            return "[Error] Invalid Save slot index!";
+        }
+
+        if (availableSaveFiles == null) 
+        {
+            availableSaveFiles = SaveFileReaderWriter.CheckAvailableSaveFiles(Application.persistentDataPath, savefileName);
+        }
+
+        if (availableSaveFiles != null) 
+        {
+            if (availableSaveFiles.Length <= 0) 
+            {
+                Debug.LogError("[Error] availableSaveFiles array not initialized!");
+                return "[Error] availableSaveFiles array not initialized!";
+            }
+        }
+        else 
+        {
+            Debug.LogError("[Error] availableSaveFiles array not initialized!");
+            return "[Error] availableSaveFiles array not initialized!";
+        }
+
+        return availableSaveFiles[saveSlotIndex - 1];
+    }
 }
