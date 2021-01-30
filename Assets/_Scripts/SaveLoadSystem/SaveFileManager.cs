@@ -1,6 +1,6 @@
 /*  Author: Joseph Malibiran
  *  Date Created: January 28, 2021
- *  Last Updated: January 28, 2021
+ *  Last Updated: January 29, 2021
  *  Description: Manages and also retains information regarding the loaded save files and all available save files. 
  *  
  */
@@ -10,9 +10,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SaveFileManager : MonoBehaviour {
+    [Header("Settings")]
     [SerializeField] private string savefileName = "Hamstronaut"; //This is the name of the save file. An indexing number will be appended to this name. This is different from the save file header seen in-game.
-    [SerializeField] private string savefileHeader = ""; //TODO Remove. This is only used during development to test
 
+    [Header("Temp Settings")]
+    [SerializeField] private string savefileHeader = ""; //TODO Remove. This is only used during development to test
     [SerializeField] private Vector3 playerLocation = Vector3.zero;
     [SerializeField] private Vector3 playerOrientation = Vector3.zero;
     [SerializeField] private int livesAmount = 3;
@@ -23,6 +25,7 @@ public class SaveFileManager : MonoBehaviour {
     [SerializeField] private int levelsUnlocked = 1;
     [SerializeField] private int selectedSaveSlot = 1; //TODO Remove. This is only used during development to test
 
+    [Header("Temp Debug Controls")]
     [SerializeField] private bool saveButton = false; //TODO Remove. This is only used during development to test savefile saving.
     [SerializeField] private bool loadButton = false; //TODO Remove. This is only used during development to test savefile loading.
 
