@@ -13,8 +13,10 @@ public class PlayerMovement : MonoBehaviour
     // joystic object
     public Joystick joystick;
     public Vector2 sensitivity;
-
-
+   
+    //New Addition in hopes of making the character turn pls help- Amber
+    Vector3 move;
+    //  ^   ^    ^
     /// Events
     void Start()
     {
@@ -29,6 +31,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
+        //New Addition in hopes of making the character turn pls help- Amber
+        move = new Vector3(transform.localPosition.x, 0, transform.localPosition.y).normalized;
+        //  ^   ^    ^
         //movement
         if (joystick.Horizontal > sensitivity.x)
         {
@@ -47,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.position -= new Vector3(0, 0, runVel * Time.deltaTime);
         }
+        
 
     }
 
