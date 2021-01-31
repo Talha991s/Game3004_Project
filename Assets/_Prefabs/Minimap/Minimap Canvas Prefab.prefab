@@ -327,3 +327,5 @@ MonoBehaviour:
   miniMapSize: 256
   miniMapZoom: 26
   miniMapIconSizes: 6
+  playerIconSize: 12
+  playerIconYRotation: 180

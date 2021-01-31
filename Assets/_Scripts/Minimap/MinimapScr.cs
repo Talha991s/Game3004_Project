@@ -27,7 +27,9 @@ public class MinimapScr : MonoBehaviour
     [SerializeField] private float camFollowSpeed = 10;             //How fast the minimap camera will follow the player. Note: this does not utilize smooth interpolation.
     [SerializeField] private float miniMapSize = 256;               //How big the minimap will appear in the screen.
     [SerializeField] private float miniMapZoom = 26;                //How much ground the minimap can cover. It's like an aerial view zoom effect.
-    [SerializeField] private float miniMapIconSizes = 6;
+    [SerializeField] private float miniMapIconSizes = 6;           
+    [SerializeField] private float playerIconSize = 6;              //This setting was added in case our player prefab scale differs from other objects and would need custom tweaking.
+    [SerializeField] private float playerIconYRotation = 0;         //This setting was added in case our player prefab forward direction differs from other objects and would need custom tweaking.
     //[SerializeField] private bool bUseCircleMask;
 
     private Transform initialPlayerRef;                             //Used to compare with targetPlayerRef to check if targetPlayerRef has been changed.
@@ -215,6 +217,13 @@ public class MinimapScr : MonoBehaviour
                 if (playerMinimapMarkerRef) 
                 {
                     minimapMarker.GetComponent<MeshRenderer>().material = playerMinimapMarkerRef;
+
+                    //Custom settings
+                    minimapMarker.transform.localScale = new Vector3(playerIconSize, playerIconSize, 1);
+                    if (playerIconYRotation != 0) 
+                    {
+                        minimapMarker.transform.localEulerAngles = new Vector3(90, playerIconYRotation, 0);
+                    }
                 }
                 else 
                 {
