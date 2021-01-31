@@ -31,7 +31,7 @@ public class SaveData
     public SaveData() 
     {
         //These are default values that SHOULD be replaced upon instantiation
-        savefileHeader = "default save name";
+        savefileHeader = "default header";
         gameVersion = "undefined";
         playerLocationX = 0;
         playerLocationY = 0;
