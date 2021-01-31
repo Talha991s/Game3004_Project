@@ -31,6 +31,7 @@ public class SaveFileManager : MonoBehaviour {
 
     private string[] availableSaveFiles = new string[8]; //Note: This game will have a maximum 8 save slots hardcoded.
     private SaveData loadedSaveData; //Initial save data being used
+    private string gameVersion = "0.1";
 
     //TODO Remove. This is only used during development to test
     private void Update() 
@@ -50,15 +51,16 @@ public class SaveFileManager : MonoBehaviour {
     }
 
     //Saves game data at given save slot index
-    public void SaveGame(int saveSlotIndex) 
+    public void SaveGame(int _saveSlotIndex) 
     {
-        if (saveSlotIndex <= 0 || saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
+        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
             return;
         }
 
         loadedSaveData = new SaveData();
         loadedSaveData.savefileHeader = "Marco    Lives: " + livesAmount + "; Ammo: " + ammoAmount + "; Seeds: " + seedsCollected + "; Levels Unlocked: " + levelsUnlocked;
+        loadedSaveData.gameVersion = this.gameVersion;
         loadedSaveData.playerLocationX = this.playerLocation.x;
         loadedSaveData.playerLocationY = this.playerLocation.y;
         loadedSaveData.playerLocationZ = this.playerLocation.z;
@@ -73,18 +75,23 @@ public class SaveFileManager : MonoBehaviour {
         loadedSaveData.currentLevel = this.currentLevel; //0 means not in a level
         loadedSaveData.levelsUnlocked = this.levelsUnlocked;
 
-        SaveFileReaderWriter.WriteToSaveFile(Application.persistentDataPath + "/" + savefileName + saveSlotIndex + ".hamsave", loadedSaveData);
+        SaveFileReaderWriter.WriteToSaveFile(Application.persistentDataPath + "/" + savefileName + _saveSlotIndex + ".hamsave", loadedSaveData);
     }
 
     //Loads save file data at given save slot index
-    public void LoadGame(int saveSlotIndex) 
+    public void LoadGame(int _saveSlotIndex) 
     {
-        if (saveSlotIndex <= 0 || saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
+        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
             return;
         }
 
-        loadedSaveData = SaveFileReaderWriter.ReadFromSaveFile(Application.persistentDataPath + "/" + savefileName + saveSlotIndex + ".hamsave"); 
+        loadedSaveData = SaveFileReaderWriter.ReadFromSaveFile(Application.persistentDataPath + "/" + savefileName + _saveSlotIndex + ".hamsave"); 
+
+        if (this.gameVersion != loadedSaveData.gameVersion) {
+            Debug.LogWarning("[Warning] Cannot load save file; incompatible version.");
+            return;
+        }
 
         this.savefileHeader = loadedSaveData.savefileHeader;
         this.playerLocation = new Vector3(loadedSaveData.playerLocationX, loadedSaveData.playerLocationY, loadedSaveData.playerLocationZ);
@@ -115,9 +122,9 @@ public class SaveFileManager : MonoBehaviour {
     //The header contains information about the save file. If the save slot is empty it will return "Empty Save Slot".
     //Usage: Save Slots should be represented by buttons that the user can click and the button text should be a save slot header to display its information. 
     //Pressing the button should call SaveFileManager.LoadGame(saveSlotIndex) where each button represents different save slots.
-    public string GetSaveSlotHeader(int saveSlotIndex) 
+    public string GetSaveSlotHeader(int _saveSlotIndex) 
     {
-        if (saveSlotIndex <= 0 || saveSlotIndex > 8) 
+        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) 
         { //This game will have a maximum 8 save slots hardcoded.
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
             return "[Error] Invalid Save slot index!";
@@ -142,6 +149,6 @@ public class SaveFileManager : MonoBehaviour {
             return "[Error] availableSaveFiles array not initialized!";
         }
 
-        return availableSaveFiles[saveSlotIndex - 1];
+        return availableSaveFiles[_saveSlotIndex - 1];
     }
 }

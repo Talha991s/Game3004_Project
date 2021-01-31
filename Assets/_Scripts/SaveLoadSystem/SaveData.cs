@@ -13,6 +13,7 @@ using System.Collections.Generic;
 public class SaveData 
 {
     public string savefileHeader; //The save file header seen in-game view. This is different from the save file name.
+    public string gameVersion;
     public float playerLocationX;
     public float playerLocationY;
     public float playerLocationZ;
@@ -31,6 +32,7 @@ public class SaveData
     {
         //These are default values that SHOULD be replaced upon instantiation
         savefileHeader = "default save name";
+        gameVersion = "undefined";
         playerLocationX = 0;
         playerLocationY = 0;
         playerLocationZ = 0;
@@ -46,22 +48,23 @@ public class SaveData
         levelsUnlocked = 1;
     }
 
-    public SaveData(string insertFileName, float insertPositionX, float insertPositionY, float insertPositionZ, float insertRotationX, float insertRotationY, float insertRotationZ,
-                    int insertLivesAmount, int insertAmmoAmount, int insertSeedsCollected, int insertAliensKilled, int insertCurrentLevel, int insertLevelsUnlocked)
+    public SaveData(string _insertFileName, string _insertGameVersion, float _insertPositionX, float _insertPositionY, float _insertPositionZ, float _insertRotationX, float _insertRotationY, float _insertRotationZ,
+                    int _insertLivesAmount, int _insertAmmoAmount, int _insertSeedsCollected, int _insertAliensKilled, int _insertCurrentLevel, int _insertLevelsUnlocked)
     {
-        savefileHeader = insertFileName;
-        playerLocationX = insertPositionX;
-        playerLocationY = insertPositionY;
-        playerLocationZ = insertPositionZ;
-        playerOrientationX = insertRotationX;
-        playerOrientationY = insertRotationY;
-        playerOrientationZ = insertRotationZ;
+        savefileHeader = _insertFileName;
+        gameVersion = _insertGameVersion;
+        playerLocationX = _insertPositionX;
+        playerLocationY = _insertPositionY;
+        playerLocationZ = _insertPositionZ;
+        playerOrientationX = _insertRotationX;
+        playerOrientationY = _insertRotationY;
+        playerOrientationZ = _insertRotationZ;
 
-        livesAmount = insertLivesAmount;
-        ammoAmount = insertAmmoAmount;
-        seedsCollected = insertSeedsCollected;
-        aliensKilled = insertAliensKilled;
-        currentLevel = insertCurrentLevel; //0 means not in a level
-        levelsUnlocked = insertLevelsUnlocked;
+        livesAmount = _insertLivesAmount;
+        ammoAmount = _insertAmmoAmount;
+        seedsCollected = _insertSeedsCollected;
+        aliensKilled = _insertAliensKilled;
+        currentLevel = _insertCurrentLevel; //0 means not in a level
+        levelsUnlocked = _insertLevelsUnlocked;
     }
 }

@@ -11,44 +11,44 @@ using UnityEngine;
 public static class SaveFileReaderWriter
 {
     //Writes the given SaveData object as a save file at given path.
-    public static void WriteToSaveFile(string filepath, SaveData newSaveFile) 
+    public static void WriteToSaveFile(string _filepath, SaveData _newSaveFile) 
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        FileStream stream = new FileStream(filepath, FileMode.Create); //Note: the filepath includes the filename to be created/overwritten
-        formatter.Serialize(stream, newSaveFile);
+        FileStream stream = new FileStream(_filepath, FileMode.Create); //Note: the filepath includes the filename to be created/overwritten
+        formatter.Serialize(stream, _newSaveFile);
         stream.Close();
     }
 
     //Reads save file from a given file path and returns its properties as a SaveData file.
-    public static SaveData ReadFromSaveFile(string filepath) 
+    public static SaveData ReadFromSaveFile(string _filepath) 
     {
-        if(File.Exists(filepath))
+        if(File.Exists(_filepath))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(filepath, FileMode.Open);
+            FileStream stream = new FileStream(_filepath, FileMode.Open);
             SaveData data = formatter.Deserialize(stream) as SaveData;
             stream.Close();
             return data;
         }
         else 
         {
-            Debug.LogError("[Error] Save file not found in " + filepath);
+            Debug.LogError("[Error] Save file not found in " + _filepath);
             return null;
         }
     }
 
     //Untested
     //Returns an array of available save files that can be loaded
-    public static string[] CheckAvailableSaveFiles(string saveFileDirectory, string saveFileName) 
+    public static string[] CheckAvailableSaveFiles(string _saveFileDirectory, string _saveFileName) 
     {
         string[] saveFileNames = new string[8]; //This game will have a maximum 8 save slots hardcoded.
         BinaryFormatter formatter = new BinaryFormatter();
 
         for (int index = 0; index < 8; index++) 
         {
-            if (File.Exists(saveFileDirectory + "/" + saveFileName + index.ToString())) 
+            if (File.Exists(_saveFileDirectory + "/" + _saveFileName + index.ToString())) 
             {
-                FileStream stream = new FileStream(saveFileDirectory + "/" + saveFileName + (index + 1).ToString(), FileMode.Open);
+                FileStream stream = new FileStream(_saveFileDirectory + "/" + _saveFileName + (index + 1).ToString(), FileMode.Open);
                 SaveData data = formatter.Deserialize(stream) as SaveData;
                 saveFileNames[index] = data.savefileHeader;
                 stream.Close();
