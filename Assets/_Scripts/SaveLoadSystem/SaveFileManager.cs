@@ -5,6 +5,7 @@
  *  
  */
 
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -83,6 +84,11 @@ public class SaveFileManager : MonoBehaviour {
     {
         if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
+            return;
+        }
+
+        if (!File.Exists(Application.persistentDataPath + "/" + savefileName + _saveSlotIndex + ".hamsave")) {
+            Debug.LogError("[Error] File does not exist; Cannot load a save file that does not exist.");
             return;
         }
 
