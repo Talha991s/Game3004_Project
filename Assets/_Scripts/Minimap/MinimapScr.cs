@@ -19,6 +19,7 @@ public class MinimapScr : MonoBehaviour
     [Header("Preset References")]                                   //References that the prefab should already have OR that the script will automatically find.
     [SerializeField] private GameObject canvasContainerRef;         //Drag and Drop canvas gameobject here.
     [SerializeField] private GameObject minimapMaskRef;             //Image mask used to shape the minimap
+    [SerializeField] private GameObject minimapBorderRef;
     [SerializeField] private Transform miniMapCamContainerRef;      //Container object that holds the camera for the minimap view.
     [SerializeField] private Material playerMinimapMarkerRef;       //The visual marker of how a player chracter will appear on the minimap.
     [SerializeField] private Material enemyMinimapMarkerRef;        //The visual marker of how a player chracter will appear on the minimap.
@@ -27,9 +28,10 @@ public class MinimapScr : MonoBehaviour
     [SerializeField] private float camFollowSpeed = 10;             //How fast the minimap camera will follow the player. Note: this does not utilize smooth interpolation.
     [SerializeField] private float miniMapSize = 256;               //How big the minimap will appear in the screen.
     [SerializeField] private float miniMapZoom = 26;                //How much ground the minimap can cover. It's like an aerial view zoom effect.
-    [SerializeField] private float miniMapIconSizes = 6;           
+    [SerializeField] private float miniMapIconSizes = 6;   
     [SerializeField] private float playerIconSize = 6;              //This setting was added in case our player prefab scale differs from other objects and would need custom tweaking.
     [SerializeField] private float playerIconYRotation = 0;         //This setting was added in case our player prefab forward direction differs from other objects and would need custom tweaking.
+    [SerializeField] private bool rotateWithPlayer = false;         //Set whether or not the minimap rotates with player oriantation
     //[SerializeField] private bool bUseCircleMask;
 
     private Transform initialPlayerRef;                             //Used to compare with targetPlayerRef to check if targetPlayerRef has been changed.
@@ -83,7 +85,8 @@ public class MinimapScr : MonoBehaviour
                 this.transform.SetParent(canvasContainerRef.transform);
                 this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 2, miniMapSize - 2);
+                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 return;
             }
         }
@@ -97,7 +100,8 @@ public class MinimapScr : MonoBehaviour
                 this.transform.SetParent(canvasContainerRef.transform);
                 this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 2, miniMapSize - 2);
+                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 return;
             }
         }
@@ -112,7 +116,8 @@ public class MinimapScr : MonoBehaviour
         this.transform.SetParent(canvasContainerRef.transform);
         this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
         this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-        minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+        minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 2, miniMapSize - 2);
+        minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
         initialPlayerIconRef = canvasContainerRef.transform;
     }
 
@@ -170,6 +175,11 @@ public class MinimapScr : MonoBehaviour
         //Set minimap Camera to follow the player
         miniMapCamContainerRef.position = Vector3.MoveTowards(miniMapCamContainerRef.position, new Vector3(targetPlayerRef.position.x, targetPlayerRef.position.y + camOverheadDistance, targetPlayerRef.position.z), camFollowSpeed * Time.deltaTime);
         
+        if (rotateWithPlayer) 
+        {
+            miniMapCamContainerRef.eulerAngles = new Vector3(0, targetPlayerRef.localEulerAngles.y + playerIconYRotation, 0);
+        }
+
     }
 
     //Checks if the targetPlayerRef has changed since last checked.

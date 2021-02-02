@@ -30,7 +30,7 @@ public class SaveFileManager : MonoBehaviour {
     [SerializeField] private bool saveButton = false;                   //TODO Remove. This is only used during development to test savefile saving.
     [SerializeField] private bool loadButton = false;                   //TODO Remove. This is only used during development to test savefile loading.
 
-    private string[] availableSaveFiles = new string[8];                //Note: This game will have a maximum 8 save slots hardcoded.
+    private string[] availableSaveFiles = new string[9];                //Note: This game will have a maximum 8 save slots hardcoded.
     private SaveData loadedSaveData;                                    //Initial save data being used
     private string gameVersion = "0.1";
 
