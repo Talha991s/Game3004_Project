@@ -6,7 +6,7 @@
 
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
+//using UnityEngine;
 
 public static class SaveFileReaderWriter
 {
@@ -32,7 +32,7 @@ public static class SaveFileReaderWriter
         }
         else 
         {
-            Debug.LogError("[Error] Save file not found in " + _filepath);
+            //Debug.LogError("[Error] Save file not found in " + _filepath);
             return null;
         }
     }
@@ -41,14 +41,14 @@ public static class SaveFileReaderWriter
     //Returns an array of available save files that can be loaded
     public static string[] CheckAvailableSaveFiles(string _saveFileDirectory, string _saveFileName) 
     {
-        string[] saveFileNames = new string[8]; //This game will have a maximum 8 save slots hardcoded.
+        string[] saveFileNames = new string[9]; //This game will have a maximum 9 save slots hardcoded.
         BinaryFormatter formatter = new BinaryFormatter();
 
-        for (int index = 0; index < 8; index++) 
+        for (int index = 0; index <= 8; index++) 
         {
             if (File.Exists(_saveFileDirectory + "/" + _saveFileName + index.ToString())) 
             {
-                FileStream stream = new FileStream(_saveFileDirectory + "/" + _saveFileName + (index + 1).ToString(), FileMode.Open);
+                FileStream stream = new FileStream(_saveFileDirectory + "/" + _saveFileName + (index).ToString(), FileMode.Open);
                 SaveData data = formatter.Deserialize(stream) as SaveData;
                 saveFileNames[index] = data.savefileHeader;
                 stream.Close();

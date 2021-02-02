@@ -54,7 +54,7 @@ public class SaveFileManager : MonoBehaviour {
     //Saves game data at given save slot index
     public void SaveGame(int _saveSlotIndex) 
     {
-        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
+        if (_saveSlotIndex < 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 (0 to 8) save slots hardcoded. 0 slot should be reserved for quicksave
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
             return;
         }
@@ -82,7 +82,7 @@ public class SaveFileManager : MonoBehaviour {
     //Saves given game data at given save slot index
     public void SaveGame(int _saveSlotIndex, SaveData _saveData) 
     {
-        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
+        if (_saveSlotIndex < 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
             return;
         }
@@ -146,7 +146,7 @@ public class SaveFileManager : MonoBehaviour {
     //Pressing the button should call SaveFileManager.LoadGame(saveSlotIndex) where each button represents different save slots.
     public string GetSaveSlotHeader(int _saveSlotIndex) 
     {
-        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) 
+        if (_saveSlotIndex < 0 || _saveSlotIndex > 8) 
         { //This game will have a maximum 8 save slots hardcoded.
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
             return "[Error] Invalid Save slot index!";
