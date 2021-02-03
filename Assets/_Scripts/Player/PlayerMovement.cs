@@ -8,21 +8,25 @@ public class PlayerMovement : MonoBehaviour
     // running speed
     public float runVel;
     // jumping power
-    public float jumpVel;
+    public float jumpForce;
 
     // joystic object
     public Joystick joystick;
     public float sensitivity;
-   
-    //New Addition in hopes of making the character turn pls help- Amber
-    Vector3 move;
-    //  ^   ^    ^
+
+    public Rigidbody rb;
+    public bool grounded;
+
+    public CapsuleCollider body;
+    public BoxCollider groundCheck;
+
     /// Events
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
+        body = GetComponent<CapsuleCollider>();
+        groundCheck = transform.GetComponentInChildren<BoxCollider>();
     }
-
 
     void Update()
     {
@@ -31,9 +35,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
-        //New Addition in hopes of making the character turn pls help- Amber
-        move = new Vector3(transform.localPosition.x, 0, transform.localPosition.y).normalized;
-        //  ^   ^    ^
+        
         //movement
         if (joystick.Horizontal > sensitivity)
         {
@@ -60,5 +62,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void Jump()
+    {
+        if (grounded)
+        {
+            rb.AddForce(new Vector3(0, jumpForce, 0));
+        }
+    }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        grounded = true;
+    }
+    private void OnCollisionExit(Collision other)
+    {
+        grounded = false;
+    }
 }
