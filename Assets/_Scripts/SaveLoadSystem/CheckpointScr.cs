@@ -17,28 +17,39 @@ public class CheckpointScr : MonoBehaviour
     private float quickSaveCooldown = 2.0f;
     private bool canActivateCheckpoint = true;
 
+    //Note: The player prefab needs a collider, rigidbody, and a "Player" tag to be detected by OnTriggerEnter()
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player" && canActivateCheckpoint) 
         {
-            Debug.Log("[Notice] Quicksave activated.");
-            //Note: We elect to use coroutine to set up a delay before the player can activate quicksave again. 
-            //This is a safety measure to prevent the system from accidentally triggering more than once in quick succession.
-            StartCoroutine(QuickSaveRoutine(quickSaveCooldown));    
+            QuickSave(); 
         }
+    }
+
+    private void QuickSave() 
+    {
+        Debug.Log("[Notice] Quicksave activated.");
+        //Note: We elect to use coroutine to set up a delay before the player can activate quicksave again. 
+        //This is a safety measure to prevent the system from accidentally triggering more than once in quick succession.
+        StartCoroutine(QuickSaveRoutine(quickSaveCooldown));   
     }
 
     private IEnumerator QuickSaveRoutine(float delay)
     {
+        
         canActivateCheckpoint = false;
+
 
         if (saveManagerRef) 
         {
-            saveManagerRef.SaveGame(0);
+            saveManagerRef.QuickSave();
         }
         else 
         {
-            SaveFileReaderWriter.WriteToSaveFile(Application.persistentDataPath + "/Hamstronaut0.hamsave", new SaveData());
+            SaveData newData = new SaveData();
+            newData.gameVersion = "0.1";
+            SaveFileReaderWriter.WriteToSaveFile(Application.persistentDataPath + "/Hamstronaut0.hamsave", newData);
         }
 
         yield return new WaitForSeconds(delay);

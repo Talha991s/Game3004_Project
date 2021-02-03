@@ -51,16 +51,37 @@ public class SaveFileManager : MonoBehaviour {
         }
     }
 
+    public void QuickSave() {
+        loadedSaveData = new SaveData();
+        loadedSaveData.savefileHeader = "(Quicksave) Marco    Lives: " + loadedSaveData.livesAmount + "; Ammo: " + loadedSaveData.ammoAmount + "; Seeds: " + loadedSaveData.seedsCollected + "; Levels Unlocked: " + loadedSaveData.levelsUnlocked;
+        loadedSaveData.gameVersion = this.gameVersion;
+        loadedSaveData.playerLocationX = this.playerLocation.x;
+        loadedSaveData.playerLocationY = this.playerLocation.y;
+        loadedSaveData.playerLocationZ = this.playerLocation.z;
+        loadedSaveData.playerOrientationX = this.playerOrientation.x;
+        loadedSaveData.playerOrientationY = this.playerOrientation.y;
+        loadedSaveData.playerOrientationZ = this.playerOrientation.z;
+
+        loadedSaveData.livesAmount = this.livesAmount;
+        loadedSaveData.ammoAmount = this.ammoAmount;
+        loadedSaveData.seedsCollected = this.seedsCollected;
+        loadedSaveData.aliensKilled = this.aliensKilled;
+        loadedSaveData.currentLevel = this.currentLevel; //0 means not in a level
+        loadedSaveData.levelsUnlocked = this.levelsUnlocked;
+
+        SaveFileReaderWriter.WriteToSaveFile(Application.persistentDataPath + "/" + savefileName + "0.hamsave", loadedSaveData);
+    }
+
     //Saves game data at given save slot index
     public void SaveGame(int _saveSlotIndex) 
     {
-        if (_saveSlotIndex < 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 (0 to 8) save slots hardcoded. 0 slot should be reserved for quicksave
+        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 (0 to 8) save slots hardcoded. 0 slot should be reserved for quicksave
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
             return;
         }
 
         loadedSaveData = new SaveData();
-        loadedSaveData.savefileHeader = "Marco    Lives: " + livesAmount + "; Ammo: " + ammoAmount + "; Seeds: " + seedsCollected + "; Levels Unlocked: " + levelsUnlocked;
+        loadedSaveData.savefileHeader = "Marco    Lives: " + loadedSaveData.livesAmount + "; Ammo: " + loadedSaveData.ammoAmount + "; Seeds: " + loadedSaveData.seedsCollected + "; Levels Unlocked: " + loadedSaveData.levelsUnlocked;
         loadedSaveData.gameVersion = this.gameVersion;
         loadedSaveData.playerLocationX = this.playerLocation.x;
         loadedSaveData.playerLocationY = this.playerLocation.y;
@@ -82,7 +103,7 @@ public class SaveFileManager : MonoBehaviour {
     //Saves given game data at given save slot index
     public void SaveGame(int _saveSlotIndex, SaveData _saveData) 
     {
-        if (_saveSlotIndex < 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
+        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
             Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
             return;
         }
@@ -96,8 +117,8 @@ public class SaveFileManager : MonoBehaviour {
     //Loads save file data at given save slot index
     public SaveData LoadGame(int _saveSlotIndex) 
     {
-        if (_saveSlotIndex <= 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
-            Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 1 to 8.");
+        if (_saveSlotIndex < 0 || _saveSlotIndex > 8) { //This game will have a maximum 8 save slots hardcoded.
+            Debug.LogError("[Error] Invalid save slot index! Slot number must be between from 0 to 8.");
             return null;
         }
 
@@ -109,7 +130,7 @@ public class SaveFileManager : MonoBehaviour {
         loadedSaveData = SaveFileReaderWriter.ReadFromSaveFile(Application.persistentDataPath + "/" + savefileName + _saveSlotIndex + ".hamsave"); 
 
         if (this.gameVersion != loadedSaveData.gameVersion) {
-            Debug.LogWarning("[Warning] Cannot load save file; incompatible version.");
+            Debug.LogWarning("[Warning] Cannot load save file; incompatible version. ");
             return null;
         }
 

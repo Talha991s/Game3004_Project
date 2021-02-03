@@ -85,7 +85,7 @@ public class MinimapScr : MonoBehaviour
                 this.transform.SetParent(canvasContainerRef.transform);
                 this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 2, miniMapSize - 2);
+                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
                 minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 return;
             }
@@ -100,7 +100,7 @@ public class MinimapScr : MonoBehaviour
                 this.transform.SetParent(canvasContainerRef.transform);
                 this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 2, miniMapSize - 2);
+                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
                 minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 return;
             }
@@ -116,7 +116,7 @@ public class MinimapScr : MonoBehaviour
         this.transform.SetParent(canvasContainerRef.transform);
         this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
         this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-        minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 2, miniMapSize - 2);
+        minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
         minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
         initialPlayerIconRef = canvasContainerRef.transform;
     }
