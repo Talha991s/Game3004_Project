@@ -51,6 +51,10 @@ ExportedObj/
 # Unity3D generated file on crash reports
 sysinfo.txt
 
+#Unity user personal preferences for window layout and other stuff
+UserSettings/
+UserSettings/EditorUserSettings.asset
+
 # Builds
 *.apk
 *.unitypackage

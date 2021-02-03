@@ -19,6 +19,7 @@ public class MinimapScr : MonoBehaviour
     [Header("Preset References")]                                   //References that the prefab should already have OR that the script will automatically find.
     [SerializeField] private GameObject canvasContainerRef;         //Drag and Drop canvas gameobject here.
     [SerializeField] private GameObject minimapMaskRef;             //Image mask used to shape the minimap
+    [SerializeField] private GameObject minimapBorderRef;
     [SerializeField] private Transform miniMapCamContainerRef;      //Container object that holds the camera for the minimap view.
     [SerializeField] private Material playerMinimapMarkerRef;       //The visual marker of how a player chracter will appear on the minimap.
     [SerializeField] private Material enemyMinimapMarkerRef;        //The visual marker of how a player chracter will appear on the minimap.
@@ -27,9 +28,10 @@ public class MinimapScr : MonoBehaviour
     [SerializeField] private float camFollowSpeed = 10;             //How fast the minimap camera will follow the player. Note: this does not utilize smooth interpolation.
     [SerializeField] private float miniMapSize = 256;               //How big the minimap will appear in the screen.
     [SerializeField] private float miniMapZoom = 26;                //How much ground the minimap can cover. It's like an aerial view zoom effect.
-    [SerializeField] private float miniMapIconSizes = 6;           
+    [SerializeField] private float miniMapIconSizes = 6;   
     [SerializeField] private float playerIconSize = 6;              //This setting was added in case our player prefab scale differs from other objects and would need custom tweaking.
     [SerializeField] private float playerIconYRotation = 0;         //This setting was added in case our player prefab forward direction differs from other objects and would need custom tweaking.
+    [SerializeField] private bool rotateWithPlayer = false;         //Set whether or not the minimap rotates with player oriantation
     //[SerializeField] private bool bUseCircleMask;
 
     private Transform initialPlayerRef;                             //Used to compare with targetPlayerRef to check if targetPlayerRef has been changed.
@@ -83,7 +85,8 @@ public class MinimapScr : MonoBehaviour
                 this.transform.SetParent(canvasContainerRef.transform);
                 this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
+                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 return;
             }
         }
@@ -97,7 +100,8 @@ public class MinimapScr : MonoBehaviour
                 this.transform.SetParent(canvasContainerRef.transform);
                 this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
+                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 return;
             }
         }
@@ -112,7 +116,8 @@ public class MinimapScr : MonoBehaviour
         this.transform.SetParent(canvasContainerRef.transform);
         this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
         this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-        minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+        minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
+        minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
         initialPlayerIconRef = canvasContainerRef.transform;
     }
 
@@ -170,6 +175,11 @@ public class MinimapScr : MonoBehaviour
         //Set minimap Camera to follow the player
         miniMapCamContainerRef.position = Vector3.MoveTowards(miniMapCamContainerRef.position, new Vector3(targetPlayerRef.position.x, targetPlayerRef.position.y + camOverheadDistance, targetPlayerRef.position.z), camFollowSpeed * Time.deltaTime);
         
+        if (rotateWithPlayer) 
+        {
+            miniMapCamContainerRef.eulerAngles = new Vector3(0, targetPlayerRef.localEulerAngles.y + playerIconYRotation, 0);
+        }
+
     }
 
     //Checks if the targetPlayerRef has changed since last checked.
@@ -186,12 +196,12 @@ public class MinimapScr : MonoBehaviour
 
     //Creates an icon that will represent the given target object on the minimap
     //Note: This marker object should only be seen by the minimap camera; turn off the Minimap Marker layer on other cameras.
-    private void AddMinimapMarker(Transform targetObj, MinimapMarker markerType) 
+    private void AddMinimapMarker(Transform _targetObj, MinimapMarker _markerType) 
     {
         GameObject minimapMarker; 
 
         //Temp marker type check. Will need to be modified as more marker types are accomodated.
-        if ( !(markerType == MinimapMarker.PLAYER || markerType == MinimapMarker.ENEMY) ) 
+        if ( !(_markerType == MinimapMarker.PLAYER || _markerType == MinimapMarker.ENEMY) ) 
         {
             Debug.LogError("[Error] Invalid minimap marker type; Aborting operation...");
             return;
@@ -204,12 +214,12 @@ public class MinimapScr : MonoBehaviour
         minimapMarker.GetComponent<MeshRenderer>().receiveShadows = false;
         Destroy(minimapMarker.GetComponent<MeshCollider>());
 
-        minimapMarker.transform.SetParent(targetObj);
+        minimapMarker.transform.SetParent(_targetObj);
         minimapMarker.transform.localPosition = new Vector3(0, iconOverheadHeight, 0);
         minimapMarker.transform.localEulerAngles = new Vector3(90, 0, 0);
         minimapMarker.transform.localScale = new Vector3(miniMapIconSizes, miniMapIconSizes, 1);
 
-        switch (markerType) 
+        switch (_markerType) 
         {
             case MinimapMarker.NONE:
                 return;
@@ -247,9 +257,9 @@ public class MinimapScr : MonoBehaviour
     }
 
     //Set new player character that the minimap cam will follow.
-    public void SetTargetPlayer(Transform insertPlayer) 
+    public void SetTargetPlayer(Transform _insertPlayer) 
     {
-        targetPlayerRef = insertPlayer;
+        targetPlayerRef = _insertPlayer;
         miniMapCamContainerRef.position = new Vector3(targetPlayerRef.transform.position.x, targetPlayerRef.transform.position.y + 10, targetPlayerRef.transform.position.z);
 
         //If the target player character has been changed: Create new Minimap icon for the new player character.
@@ -292,7 +302,7 @@ public class MinimapScr : MonoBehaviour
     }
 
     //Set whether or not the minimap is visible.
-    public void SetMiniMapVisibility(bool set) 
+    public void SetMiniMapVisibility(bool _set) 
     {
         //If minimapMaskRef cannot be found, try to find it. If it still cannot be found return with error log.
         if (!minimapMaskRef) 
@@ -312,11 +322,11 @@ public class MinimapScr : MonoBehaviour
         }
 
         //Set Minimap visual
-        minimapMaskRef.SetActive(set);
+        minimapMaskRef.SetActive(_set);
     }
 
     //Adjust how big the minimap will appear in the screen.
-    public void SetMinimapSize(float newMiniMapSize) 
+    public void SetMinimapSize(float _newMiniMapSize) 
     {
         if (!minimapMaskRef) 
         {
@@ -324,20 +334,20 @@ public class MinimapScr : MonoBehaviour
             return;
         }
 
-        if (newMiniMapSize <= 0) 
+        if (_newMiniMapSize <= 0) 
         {
             Debug.LogError("[Error] Invalid minimap size! Aborting operation...");
             return;
         }
 
-        miniMapSize = newMiniMapSize;
+        miniMapSize = _newMiniMapSize;
         this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
         this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
         minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
     }
 
     //Adjust how much ground the minimap can cover. Like an aerial view zoom effect.
-    public void SetMinimapZoom(float newZoomAmount) 
+    public void SetMinimapZoom(float _newZoomAmount) 
     {
         if (!miniMapCamContainerRef) 
         {
@@ -351,31 +361,31 @@ public class MinimapScr : MonoBehaviour
             return;
         }
 
-        if (newZoomAmount <= 0) 
+        if (_newZoomAmount <= 0) 
         {
             Debug.LogError("[Error] Invalid camera zoom amount! Aborting operation...");
             return;
         }
 
-        miniMapZoom = newZoomAmount;
+        miniMapZoom = _newZoomAmount;
         miniMapCamContainerRef.GetChild(0).GetComponent<Camera>().orthographicSize = miniMapZoom;
     }
 
     //Adjust the size of icons in the minimap
-    public void SetIconSize(float newMiniMapIconSize) 
+    public void SetIconSize(float _newMiniMapIconSize) 
     {
         if (!initialPlayerIconRef) 
         {
             return;
         }
 
-        if (newMiniMapIconSize <= 0) 
+        if (_newMiniMapIconSize <= 0) 
         {
             Debug.LogError("[Error] Invalid icon size! Aborting operation...");
             return;
         }
 
-        miniMapIconSizes = newMiniMapIconSize;
+        miniMapIconSizes = _newMiniMapIconSize;
         initialPlayerIconRef.localScale = new Vector3(miniMapIconSizes, miniMapIconSizes, 1);
 
         //TODO adjust other icons here
