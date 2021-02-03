@@ -52,6 +52,7 @@ ExportedObj/
 sysinfo.txt
 
 #Unity user personal preferences for window layout and other stuff
+UserSettings/
 UserSettings/EditorUserSettings.asset
 
 # Builds
