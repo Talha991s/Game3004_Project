@@ -11,10 +11,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class SimplePausingScr 
+public class SimplePausingScr : MonoBehaviour
 {
     //Toggles game pause
-    public static void ToggleGamePause() 
+    public void ToggleGamePause() 
     {
         if (Time.timeScale == 0) 
         {
@@ -26,7 +26,7 @@ public static class SimplePausingScr
     }
 
     //Sets the whether the game is paused or not.
-    public static void SetGamePause(bool _set) 
+    public void SetGamePause(bool _set) 
     {
         if (_set) 
         {
@@ -37,13 +37,13 @@ public static class SimplePausingScr
     }
 
     //Sets the timescale manually
-    public static void SetTimeScale(float _timeScale) 
+    public void SetTimeScale(float _timeScale) 
     {
         Time.timeScale = _timeScale;
     }
 
     //Returns whether or not the game is paused.
-    public static bool IsGamePaused() 
+    public bool IsGamePaused() 
     {
         if (Time.timeScale == 0) 
         {
