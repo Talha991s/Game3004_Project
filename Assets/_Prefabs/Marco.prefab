@@ -456,3 +456,4 @@ MonoBehaviour:
   grounded: 0
   body: {fileID: 1921957828526235013}
   groundCheck: {fileID: 700659312}
+  cam: {fileID: 0}
