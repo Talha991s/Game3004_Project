@@ -19,6 +19,10 @@ public class PlayerMovement : MonoBehaviour
 
     public CapsuleCollider body;
     public BoxCollider groundCheck;
+    
+    Vector3 direction;
+
+    public Camera cam;
 
     /// Events
     void Start()
@@ -35,30 +39,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
-        
-        //movement
-        if (joystick.Horizontal > sensitivity)
-        {
-            transform.position += new Vector3(runVel * Time.deltaTime, 0, 0);
-        }
-        else if (joystick.Horizontal < -sensitivity)
-        {
-            transform.position -= new Vector3(runVel * Time.deltaTime, 0, 0);
-        }
+        direction = new Vector3(joystick.Horizontal, 0, joystick.Vertical).normalized;
 
-        if (joystick.Vertical > sensitivity)
+        if (joystick.Direction.magnitude > sensitivity)
         {
-            transform.position += new Vector3(0, 0, runVel * Time.deltaTime);
-        }
-        else if (joystick.Vertical < -sensitivity)
-        {
-            transform.position -= new Vector3(0, 0, runVel * Time.deltaTime);
-        }
-        
-        if(joystick.Direction.magnitude > sensitivity)
-        {
-            float angle = Mathf.Atan2(joystick.Direction.x, joystick.Direction.y) *  Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, angle + 180, 0);
+            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(new Vector3(0, angle + 180, 0));
+
+            Vector3 moveDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
+            transform.position += moveDir.normalized * runVel * Time.deltaTime;
+            
         }
     }
 
