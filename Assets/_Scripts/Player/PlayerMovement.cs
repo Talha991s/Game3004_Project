@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     // running speed
-    public float runVel;
+    public float speed;
     // jumping power
     public float jumpForce;
 
@@ -21,8 +21,22 @@ public class PlayerMovement : MonoBehaviour
     public BoxCollider groundCheck;
     
     Vector3 direction;
+    float hor;
+    float vert;
+    public float turnSmoothVelocity;
+    public float turnSmoothTime;
 
     public Camera cam;
+
+    public enum ControlSettings
+    {
+        DESKTOP,
+        MOBILE
+    }
+
+    public ControlSettings controlSettings;
+    public bool inventory;
+    
 
     /// Events
     void Start()
@@ -30,14 +44,88 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         body = GetComponent<CapsuleCollider>();
         groundCheck = transform.GetComponentInChildren<BoxCollider>();
+        if (controlSettings == ControlSettings.DESKTOP)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     void Update()
     {
-        Movement();
+        if (controlSettings == ControlSettings.DESKTOP)
+        {
+            Controls();
+        }
+        else if (controlSettings == ControlSettings.MOBILE)
+        {
+            ControlsMobile();
+        }
     }
 
-    void Movement()
+    void Controls()
+    {
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (!inventory)
+            {
+                GameObject.Find("Inventory").GetComponent<PlayerInventory>().OpenInvetory();
+                inventory = true;
+            }
+            else
+            {
+                GameObject.Find("Inventory").GetComponent<PlayerInventory>().CloseInvetory();
+                inventory = false;
+            }
+
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
+
+        // Side to Side movement
+        if(Input.GetKey(KeyCode.A))
+        {
+            hor = -1;
+        }
+        else if(Input.GetKey(KeyCode.D))
+        {
+            hor = 1;
+        }
+        else
+        {
+            hor = 0;
+        }
+        // Forward and Back movement
+        if(Input.GetKey(KeyCode.W))
+        {
+            vert = 1;
+        }
+        else if(Input.GetKey(KeyCode.S))
+        {
+            vert = -1;
+        }
+        else
+        {
+            vert = 0;
+        }
+
+        direction = new Vector3(hor, 0, vert);
+
+        if(direction.magnitude > sensitivity)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity,turnSmoothTime);
+
+            transform.rotation = Quaternion.Euler(0, angle + 180, 0);
+
+            Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
+            transform.position += moveDir * speed * Time.deltaTime;
+        }
+    }
+
+    void ControlsMobile()
     {
         direction = new Vector3(joystick.Horizontal, 0, joystick.Vertical).normalized;
 
@@ -47,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(new Vector3(0, angle + 180, 0));
 
             Vector3 moveDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
-            transform.position += moveDir.normalized * runVel * Time.deltaTime;
+            transform.position += moveDir.normalized * speed * Time.deltaTime;
             
         }
     }
