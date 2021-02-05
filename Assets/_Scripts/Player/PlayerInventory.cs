@@ -10,19 +10,6 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    //public GameObject InventoryObj;  
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
     public void OpenInvetory() //Button calls this function to open the inventory
     {
