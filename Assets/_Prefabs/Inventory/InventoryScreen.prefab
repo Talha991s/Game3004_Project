@@ -1050,6 +1050,7 @@ GameObject:
   m_Component:
   - component: {fileID: 758842224424761023}
   - component: {fileID: 4894701855779795451}
+  - component: {fileID: 3352860795183693506}
   m_Layer: 5
   m_Name: InventoryScreen
   m_TagString: Untagged
@@ -1064,7 +1065,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8532845985682766938}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1104,6 +1105,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3352860795183693506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8532845985682766938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c42afd3f39e7564c850de083365acdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8976608617082733564
 GameObject:
   m_ObjectHideFlags: 0

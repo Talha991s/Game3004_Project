@@ -44,10 +44,6 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         body = GetComponent<CapsuleCollider>();
         groundCheck = transform.GetComponentInChildren<BoxCollider>();
-        if (controlSettings == ControlSettings.DESKTOP)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
     }
 
     void Update()
