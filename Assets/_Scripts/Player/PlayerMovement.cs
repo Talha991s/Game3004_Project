@@ -85,15 +85,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Side to Side movement
-        if(Input.GetKey(KeyCode.A))
+        // Flipped the hor values that don't seem to work with new model.
+        if (Input.GetKey(KeyCode.A))
         {
-            hor = -1;
+            hor = 1;
             
             animator.SetBool("Moving", true);
         }
         else if(Input.GetKey(KeyCode.D))
         {
-            hor = 1;
+            hor = -1;
             animator.SetBool("Moving", true);
         }
         else
@@ -102,14 +103,15 @@ public class PlayerMovement : MonoBehaviour
             
         }
         // Forward and Back movement
+        // Flipped the vert values that don't seem to work with new model.
         if(Input.GetKey(KeyCode.W))
         {
-            vert = 1;
+            vert = -1;
             animator.SetBool("Moving", true);
         }
         else if(Input.GetKey(KeyCode.S))
         {
-            vert = -1;
+            vert = 1;
             animator.SetBool("Moving", true);
         }
         else
