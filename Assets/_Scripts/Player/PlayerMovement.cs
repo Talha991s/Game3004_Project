@@ -80,17 +80,37 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
         }
-
-
-
+        
         // Handles changes in direction
         if(Input.GetKeyDown(KeyCode.A))
         {
-            angle += -90;
+            if (Input.GetKey(KeyCode.W))
+            {
+                angle += -45;
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                angle += -255;
+            }
+            else
+            {
+                angle += -90;
+            }
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            angle += 90;
+            if (Input.GetKey(KeyCode.W))
+            {
+                angle += 45;
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                angle += 255;
+            }
+            else
+            {
+                angle += 90;
+            }
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
