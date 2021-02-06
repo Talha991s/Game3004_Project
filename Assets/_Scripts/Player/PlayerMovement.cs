@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     float vert;
     public float turnSmoothVelocity;
     public float turnSmoothTime;
+    Animator animator;
+    
 
     public Camera cam;
 
@@ -36,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     public ControlSettings controlSettings;
     public bool inventory;
-    
+
 
     /// Events
     void Start()
@@ -44,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         body = GetComponent<CapsuleCollider>();
         groundCheck = transform.GetComponentInChildren<BoxCollider>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -56,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
         {
             ControlsMobile();
         }
+       
     }
 
     void Controls()
@@ -84,27 +88,34 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetKey(KeyCode.A))
         {
             hor = -1;
+            
+            animator.SetBool("Moving", true);
         }
         else if(Input.GetKey(KeyCode.D))
         {
             hor = 1;
+            animator.SetBool("Moving", true);
         }
         else
         {
             hor = 0;
+            
         }
         // Forward and Back movement
         if(Input.GetKey(KeyCode.W))
         {
             vert = 1;
+            animator.SetBool("Moving", true);
         }
         else if(Input.GetKey(KeyCode.S))
         {
             vert = -1;
+            animator.SetBool("Moving", true);
         }
         else
         {
             vert = 0;
+            animator.SetBool("Moving", false);
         }
 
         direction = new Vector3(hor, 0, vert);
@@ -141,12 +152,14 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             rb.AddForce(new Vector3(0, jumpForce, 0));
+            animator.SetBool("Jumping", true);
         }
     }
 
     private void OnCollisionEnter(Collision other)
     {
         grounded = true;
+        animator.SetBool("Jumping", false);
     }
     private void OnCollisionExit(Collision other)
     {
