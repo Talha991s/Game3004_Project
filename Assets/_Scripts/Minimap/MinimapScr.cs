@@ -87,6 +87,7 @@ public class MinimapScr : MonoBehaviour
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
                 minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
                 minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                this.transform.transform.SetSiblingIndex(0);
                 return;
             }
         }
@@ -102,6 +103,7 @@ public class MinimapScr : MonoBehaviour
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
                 minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
                 minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                this.transform.transform.SetSiblingIndex(0);
                 return;
             }
         }
@@ -115,6 +117,7 @@ public class MinimapScr : MonoBehaviour
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
                 minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
                 minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                this.transform.transform.SetSiblingIndex(0);
                 return;
             }
         }
@@ -128,6 +131,7 @@ public class MinimapScr : MonoBehaviour
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
                 minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
                 minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                this.transform.transform.SetSiblingIndex(0);
                 return;
             }
         }
