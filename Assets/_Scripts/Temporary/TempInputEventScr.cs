@@ -11,18 +11,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SaveFileManager))]
-[RequireComponent(typeof(PauseScreen))]
+[RequireComponent(typeof(SimplePausingScr))]
 public class TempInputEventScr : MonoBehaviour
 {
     [SerializeField] private Transform playerCharRef;
 
     private SaveFileManager saveManager;
-    private PauseScreen pauseScr;
+    private SimplePausingScr pauseScr;
 
     private void Awake() 
     {
         saveManager = this.gameObject.GetComponent<SaveFileManager>();
-        pauseScr = this.gameObject.GetComponent<PauseScreen>();
+        pauseScr = this.gameObject.GetComponent<SimplePausingScr>();
     }
 
     private void Update() 

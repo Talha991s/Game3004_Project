@@ -91,12 +91,38 @@ public class MinimapScr : MonoBehaviour
             }
         }
 
-        //Check if Canvas exists with the name 'HUD'.
-        if (GameObject.Find("HUD"))
+        //Check if Canvas exists with alias.
+        else if (GameObject.Find("HUD"))
         {
             if (GameObject.Find("HUD").GetComponent<Canvas>()) 
             {
                 canvasContainerRef = GameObject.Find("HUD");
+                this.transform.SetParent(canvasContainerRef.transform);
+                this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
+                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
+                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                return;
+            }
+        }
+        else if (GameObject.Find("HUD (Desktop)"))
+        {
+            if (GameObject.Find("HUD (Desktop)").GetComponent<Canvas>()) 
+            {
+                canvasContainerRef = GameObject.Find("HUD (Desktop)");
+                this.transform.SetParent(canvasContainerRef.transform);
+                this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
+                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
+                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
+                return;
+            }
+        }
+        if (GameObject.Find("HUD (Mobile)"))
+        {
+            if (GameObject.Find("HUD (Mobile)").GetComponent<Canvas>()) 
+            {
+                canvasContainerRef = GameObject.Find("HUD (Mobile)");
                 this.transform.SetParent(canvasContainerRef.transform);
                 this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
                 this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
