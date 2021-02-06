@@ -1105,9 +1105,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2683883473237106884}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: TemporaryGameoverScene
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1152,7 +1152,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 629.7002, y: 244.90002}
+  m_AnchoredPosition: {x: 545, y: 233}
   m_SizeDelta: {x: 34.2625, y: 32.2247}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2460027876417993401
@@ -1237,13 +1237,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 974280772582438701}
+        m_TargetAssemblyTypeName: PauseScreen, Assembly-CSharp
+        m_MethodName: ToggleGamePause
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1911,6 +1911,7 @@ GameObject:
   - component: {fileID: 2683883473237106886}
   - component: {fileID: 2683883473237106885}
   - component: {fileID: 842678524679505771}
+  - component: {fileID: 7279539703682552268}
   m_Layer: 5
   m_Name: HUD (Desktop)
   m_TagString: Untagged
@@ -2013,6 +2014,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c42afd3f39e7564c850de083365acdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7279539703682552268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2683883473237106884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee4dbd5dc310f34487f6efae93f456f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3684372623300838255
@@ -2368,10 +2381,22 @@ PrefabInstance:
     - target: {fileID: 3120622320543422716, guid: 2845dbd0511739944baa9b65165779ad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 8532845985682766938, guid: 2845dbd0511739944baa9b65165779ad, type: 3}
+      objectReference: {fileID: 977128241}
     - target: {fileID: 3120622320543422716, guid: 2845dbd0511739944baa9b65165779ad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3120622320543422716, guid: 2845dbd0511739944baa9b65165779ad, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseInvetory
+      objectReference: {fileID: 0}
+    - target: {fileID: 3120622320543422716, guid: 2845dbd0511739944baa9b65165779ad, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerInventory, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3120622320543422716, guid: 2845dbd0511739944baa9b65165779ad, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8532845985682766938, guid: 2845dbd0511739944baa9b65165779ad, type: 3}
       propertyPath: m_Name
