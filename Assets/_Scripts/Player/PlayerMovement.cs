@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     float vert;
     public float turnSmoothVelocity;
     public float turnSmoothTime;
+    float angle;
 
     public Camera cam;
 
@@ -79,9 +80,50 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
         }
+        
+        // Handles changes in direction
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                angle += -45;
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                angle += -255;
+            }
+            else
+            {
+                angle += -90;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                angle += 45;
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                angle += 255;
+            }
+            else
+            {
+                angle += 90;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            angle += 0;
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            angle += 180;
+        }
 
-        // Side to Side movement
-        if(Input.GetKey(KeyCode.A))
+
+        // Side to Side Movemnt
+        if (Input.GetKey(KeyCode.A))
         {
             hor = -1;
         }
@@ -93,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
         {
             hor = 0;
         }
+
         // Forward and Back movement
         if(Input.GetKey(KeyCode.W))
         {
@@ -111,12 +154,11 @@ public class PlayerMovement : MonoBehaviour
 
         if(direction.magnitude > sensitivity)
         {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity,turnSmoothTime);
+            
+            float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, angle, ref turnSmoothVelocity,turnSmoothTime);
+            transform.rotation = Quaternion.Euler(0, smoothedAngle + 180, 0);
 
-            transform.rotation = Quaternion.Euler(0, angle + 180, 0);
-
-            Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
+            Vector3 moveDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
             transform.position += moveDir * speed * Time.deltaTime;
         }
     }
@@ -127,8 +169,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (joystick.Direction.magnitude > sensitivity)
         {
-            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(new Vector3(0, angle + 180, 0));
+
+            
 
             Vector3 moveDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
             transform.position += moveDir.normalized * speed * Time.deltaTime;
