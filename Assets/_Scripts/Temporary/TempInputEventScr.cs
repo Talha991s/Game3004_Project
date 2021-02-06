@@ -11,15 +11,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SaveFileManager))]
+[RequireComponent(typeof(PauseScreen))]
 public class TempInputEventScr : MonoBehaviour
 {
     [SerializeField] private Transform playerCharRef;
 
     private SaveFileManager saveManager;
+    private PauseScreen pauseScr;
 
     private void Awake() 
     {
         saveManager = this.gameObject.GetComponent<SaveFileManager>();
+        pauseScr = this.gameObject.GetComponent<PauseScreen>();
     }
 
     private void Update() 
@@ -38,7 +41,7 @@ public class TempInputEventScr : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.P)) 
         {
             //Toggle Pausing here
-            SimplePausingScr.ToggleGamePause();
+            pauseScr.ToggleGamePause();
         }
 
         if (Input.GetKeyUp(KeyCode.L)) 
