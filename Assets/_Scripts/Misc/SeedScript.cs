@@ -9,9 +9,12 @@ using UnityEngine;
 
 public class SeedScript : MonoBehaviour
 {
-    [SerializeField] private GameObject invScreen; //Reference to inventory gameobject/script
-    [SerializeField] private int seedWorth = 1; // how much is this seed worth
+    private GameObject invScreen; //Reference to inventory gameobject/script
+    public int seedWorth = 1; // how much is this seed worth
 
+    void Awake(){
+        invScreen = GameObject.FindGameObjectWithTag("Inventory");
+    }
     private void OnTriggerEnter(Collider col)
     {
         //When player steps in seeds trigger, add seed worth to players count and destroy seed.

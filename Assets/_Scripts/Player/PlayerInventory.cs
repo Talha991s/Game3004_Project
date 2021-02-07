@@ -17,13 +17,13 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private Text totalSeedTxt; //reference to the total seed textbox
     [SerializeField] private Animator seedTextAnimator; //reference to the animator to make seed count appear and disappear
     private bool showSeedText = false; //are you showing the seed count
-    [SerializeField] private float seedShowTime = 5f; //How long to show the seed count for (seconds)
+    [SerializeField] private float seedShowTime = 3f; //How long to show the seed count for (seconds)
     private float scount = 0f; //Counter just to hold the amount of time elapsed since opened
 
-    //Count how many seeds are in the map and add them to variable when script awakes
+    
     private void Awake(){
-        totalSeeds = GameObject.FindGameObjectsWithTag("Seed").Length;
-        totalSeedTxt.text = totalSeeds.ToString();
+        //count how many seeds / total points the player has collected
+        FindTotalSeeds();
     }
     void FixedUpdate(){
         //Counter to close players seeds collected when opened
@@ -57,6 +57,13 @@ public class PlayerInventory : MonoBehaviour
         seedTextAnimator.SetBool("ShowCount", true);
         showSeedText = true;
         scount = 0f;
+    }
+    private void FindTotalSeeds(){
+        //Find all seeds in level by finding all "seed" tagged objects and adding up their total worth.
+        foreach(GameObject _seed in GameObject.FindGameObjectsWithTag("Seed")){
+            totalSeeds += _seed.GetComponent<SeedScript>().seedWorth;
+        }
+        totalSeedTxt.text = totalSeeds.ToString();
     }
 }
 
