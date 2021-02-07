@@ -16,9 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody rb;
     public bool grounded;
-
-    public CapsuleCollider body;
-    public BoxCollider groundCheck;
+    
     
     Vector3 direction;
     float hor;
@@ -26,8 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public float turnSmoothVelocity;
     public float turnSmoothTime;
     float angle;
-
-    public Camera cam;
+    Animator anim;
 
     public enum ControlSettings
     {
@@ -43,8 +40,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        body = GetComponent<CapsuleCollider>();
-        groundCheck = transform.GetComponentInChildren<BoxCollider>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -125,6 +121,7 @@ public class PlayerMovement : MonoBehaviour
         // Side to Side Movemnt
         if (Input.GetKey(KeyCode.A))
         {
+
             hor = -1;
         }
         else if(Input.GetKey(KeyCode.D))
@@ -154,12 +151,16 @@ public class PlayerMovement : MonoBehaviour
 
         if(direction.magnitude > sensitivity)
         {
-            
+            anim.SetInteger("AnimationPar", 1);
             float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, angle, ref turnSmoothVelocity,turnSmoothTime);
             transform.rotation = Quaternion.Euler(0, smoothedAngle, 0);
 
             Vector3 moveDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
             transform.position += moveDir * speed * Time.deltaTime;
+        }
+        else
+        {
+            anim.SetInteger("AnimationPar", 0);
         }
     }
 
