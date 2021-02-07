@@ -31,15 +31,16 @@ public class MinimapScr : MonoBehaviour
     [SerializeField] private float miniMapIconSizes = 6;   
     [SerializeField] private float playerIconSize = 6;              //This setting was added in case our player prefab scale differs from other objects and would need custom tweaking.
     [SerializeField] private float playerIconYRotation = 0;         //This setting was added in case our player prefab forward direction differs from other objects and would need custom tweaking.
+    [SerializeField] private float camOverheadDistance = 30;
+    [SerializeField] private float iconOverheadHeight = 2;          //Note: Player scale affects this
     [SerializeField] private bool rotateWithPlayer = false;         //Set whether or not the minimap rotates with player oriantation
     //[SerializeField] private bool bUseCircleMask;
+
 
     private Transform initialPlayerRef;                             //Used to compare with targetPlayerRef to check if targetPlayerRef has been changed.
     private Transform initialPlayerIconRef;
 
-    //Advanced Settings
-    private float camOverheadDistance = 30;
-    private float iconOverheadHeight = 20;
+    
 
     private void Awake() 
     {
@@ -67,6 +68,8 @@ public class MinimapScr : MonoBehaviour
     //Insures that this object is within Canvas.
     private void InsureCanvasExists() 
     {
+        bool canvasFound = false;
+
         //Check if this object is already in its proper place- as a child of Canvas object. Note: MinimapScr.cs is supposed to be attached to a prefab that is meant to go in the Canvas.
         if (this.transform.parent) 
         {
@@ -84,11 +87,6 @@ public class MinimapScr : MonoBehaviour
                 canvasContainerRef = GameObject.Find("Canvas");
                 this.transform.SetParent(canvasContainerRef.transform);
                 this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-                this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
-                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-                this.transform.transform.SetSiblingIndex(0);
-                return;
             }
         }
 
@@ -99,12 +97,8 @@ public class MinimapScr : MonoBehaviour
             {
                 canvasContainerRef = GameObject.Find("HUD");
                 this.transform.SetParent(canvasContainerRef.transform);
-                this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-                this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
-                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-                this.transform.transform.SetSiblingIndex(0);
-                return;
+                this.transform.SetSiblingIndex(0);
+                canvasFound = true;
             }
         }
         else if (GameObject.Find("HUD (Desktop)"))
@@ -113,42 +107,38 @@ public class MinimapScr : MonoBehaviour
             {
                 canvasContainerRef = GameObject.Find("HUD (Desktop)");
                 this.transform.SetParent(canvasContainerRef.transform);
-                this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-                this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
-                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-                this.transform.transform.SetSiblingIndex(0);
-                return;
+                this.transform.SetSiblingIndex(0);
+                canvasFound = true;
             }
         }
-        if (GameObject.Find("HUD (Mobile)"))
+        else if (GameObject.Find("HUD (Mobile)"))
         {
             if (GameObject.Find("HUD (Mobile)").GetComponent<Canvas>()) 
             {
                 canvasContainerRef = GameObject.Find("HUD (Mobile)");
                 this.transform.SetParent(canvasContainerRef.transform);
-                this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-                this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
-                minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
-                minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-                this.transform.transform.SetSiblingIndex(0);
-                return;
+                this.transform.SetSiblingIndex(0);
+                canvasFound = true;
             }
         }
 
         //If Canvas object cannot be found: build one.
-        canvasContainerRef = new GameObject();
-        canvasContainerRef.gameObject.AddComponent<Canvas>();
-        canvasContainerRef.gameObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
-        canvasContainerRef.gameObject.AddComponent<CanvasScaler>();
-        canvasContainerRef.gameObject.AddComponent<GraphicRaycaster>();
-        canvasContainerRef.name = "Canvas";
-        this.transform.SetParent(canvasContainerRef.transform);
+        if (!canvasFound) 
+        {
+            canvasContainerRef = new GameObject();
+            canvasContainerRef.gameObject.AddComponent<Canvas>();
+            canvasContainerRef.gameObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            canvasContainerRef.gameObject.AddComponent<CanvasScaler>();
+            canvasContainerRef.gameObject.AddComponent<GraphicRaycaster>();
+            canvasContainerRef.name = "Canvas";
+            this.transform.SetParent(canvasContainerRef.transform);
+            initialPlayerIconRef = canvasContainerRef.transform;
+        }
+
         this.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
         this.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(miniMapSize * -0.5f, miniMapSize * -0.5f);
         minimapMaskRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize - 3, miniMapSize - 3);
         minimapBorderRef.GetComponent<RectTransform>().sizeDelta = new Vector2(miniMapSize, miniMapSize);
-        initialPlayerIconRef = canvasContainerRef.transform;
     }
 
     //Extract the Minimap Camera from within the prefab and unto the root of the scene hierarchy.
@@ -246,6 +236,7 @@ public class MinimapScr : MonoBehaviour
 
         minimapMarker.transform.SetParent(_targetObj);
         minimapMarker.transform.localPosition = new Vector3(0, iconOverheadHeight, 0);
+        //minimapMarker.transform.position = new Vector3(0, transform.parent.position.y + iconOverheadHeight, 0);
         minimapMarker.transform.localEulerAngles = new Vector3(90, 0, 0);
         minimapMarker.transform.localScale = new Vector3(miniMapIconSizes, miniMapIconSizes, 1);
 

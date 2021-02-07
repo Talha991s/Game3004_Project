@@ -404,6 +404,6 @@ MonoBehaviour:
   miniMapSize: 256
   miniMapZoom: 26
   miniMapIconSizes: 6
-  playerIconSize: 12
-  playerIconYRotation: 180
+  playerIconSize: 0.5
+  playerIconYRotation: 0
   rotateWithPlayer: 0
