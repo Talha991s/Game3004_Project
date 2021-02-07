@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 64179008000869982}
   m_Layer: 0
   m_Name: Floor_Angle_01
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 4252482140939760}
   m_Layer: 0
   m_Name: Floor_Angle_01
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295

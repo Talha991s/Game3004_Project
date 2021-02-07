@@ -195,4 +195,14 @@ public class PlayerMovement : MonoBehaviour
     {
         grounded = false;
     }
+
+    // Added OnCollisionStay as I was getting inconsistent collision with imported assets
+    // Also added Ground tag so you aren't able to jump along walls
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Platform"))
+        {
+            grounded = true;
+        }
+    }
 }
