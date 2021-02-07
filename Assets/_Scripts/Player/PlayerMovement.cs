@@ -156,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
         {
             
             float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, angle, ref turnSmoothVelocity,turnSmoothTime);
-            transform.rotation = Quaternion.Euler(0, smoothedAngle + 180, 0);
+            transform.rotation = Quaternion.Euler(0, smoothedAngle, 0);
 
             Vector3 moveDir = Quaternion.Euler(0, angle, 0) * Vector3.forward;
             transform.position += moveDir * speed * Time.deltaTime;
