@@ -15,6 +15,13 @@ using UnityEngine;
 
 public class SimplePausingScr : MonoBehaviour
 {
+    //Unpause the game on start up
+    private void Awake() {
+        if (Time.timeScale == 0) 
+        {
+            Time.timeScale = 1;
+        }
+    }
 
     //Toggles game pause
     public void ToggleGamePause() 
