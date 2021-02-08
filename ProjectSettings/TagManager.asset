@@ -8,6 +8,8 @@ TagManager:
   - Inventory
   - Ground
   - Platform
+  - Hazard
+  - Spawn
   layers:
   - Default
   - TransparentFX

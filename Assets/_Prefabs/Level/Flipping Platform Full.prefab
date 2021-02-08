@@ -119,6 +119,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5985901273077776630}
     m_Modifications:
+    - target: {fileID: 1183030568935384138, guid: 765859e72c0449e45bfa72af3fd69927, type: 3}
+      propertyPath: m_TagString
+      value: Hazard
+      objectReference: {fileID: 0}
     - target: {fileID: 5348024166076792862, guid: 765859e72c0449e45bfa72af3fd69927, type: 3}
       propertyPath: m_IsTrigger
       value: 1
