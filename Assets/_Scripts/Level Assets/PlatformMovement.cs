@@ -68,7 +68,10 @@ public class PlatformMovement : MonoBehaviour
 
     void Rotate()
     {
-        transform.rotation = Quaternion.Lerp(rotationOne.rotation, rotationTwo.rotation, Mathf.PingPong(flipStart + Time.time * rotateSpeed, 1.0f));
+        if (platformType == PlatformType.FLIP)
+        {
+            transform.rotation = Quaternion.Lerp(rotationOne.rotation, rotationTwo.rotation, Mathf.PingPong(flipStart + Time.time * rotateSpeed, 1.0f));
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
